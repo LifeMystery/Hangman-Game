@@ -11,9 +11,9 @@ def get_user_input():
 
 
 def ask_file_name():
-    file_name = input("Words file? [leave empty to use short_words.txt] : ")
+    file_name = input("Words file? [leave empty to use words.txt] : ")
     if not file_name:
-        return 'short_words.txt'
+        return 'words.txt'
     return file_name
 
 
