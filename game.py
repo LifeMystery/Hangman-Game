@@ -1,9 +1,12 @@
 import random
+import requests
+import os
 
 
 def read_file(file_name):
     file = open(file_name,'r')
-    return file.readlines()
+    print(file.readlines())
+    # return file.readlines()
 
 
 def get_user_input():
@@ -11,11 +14,27 @@ def get_user_input():
 
 
 def ask_file_name():
-    file_name = input("Words file? [leave empty to use words.txt] : ")
+    file_name = input("Enter any word,  [leave empty to use default words] : ")
     if not file_name:
+        # if the user did not enter anythig then we will use words in a text file
         return 'words.txt'
     return file_name
 
+def fetch_words(category):
+    """here we call chatgbt and prompt to ask for a list of 20 words of the catagory asked by the user
+    then we overwrite the words text file with the new words"""
+    url = f"https://api.datamuse.com/words?ml={category}&max=20"
+    response = requests.get(url)
+    if response.status_code == 200:
+        words = [word['word'] for word in response.json()]
+
+        with open("new.txt", "w") as file:
+            file.writelines(word + "\n" for word in words)
+
+        return "found"
+    else:
+        print(f"Error fetching '{category}' words.")
+        return "not found"
 
 def select_random_word(words):
     random_index = random.randint(0, len(words)-1)
@@ -130,9 +149,18 @@ def run_game_loop(word, answer):
 # TODO: Step 6 - update to get words_file to use from commandline argument
 if __name__ == "__main__":
     words_file = ask_file_name()
-    words = read_file(words_file)
+    if words_file != "words.txt":
+        if fetch_words(words_file) == "not found":
+            words = read_file("words.txt")
+        else:
+            words = read_file("new.txt")
+    else:
+        words = read_file(words_file)
     selected_word = select_random_word(words)
     current_answer = random_fill_word(selected_word)
 
     run_game_loop(selected_word, current_answer)
+    
+    if os.path.exists("new.txt"):
+        os.remove("new.txt")
 
