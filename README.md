@@ -1,4 +1,4 @@
-# Hangman Game
+# Hangman Game (integrated with api)
 
 This is a simple Hangman game implemented in Python. Players attempt to guess a randomly selected word by guessing its letters one at a time. The game includes features like random word selection, fetching words from an API, and drawing a hangman figure.
 
