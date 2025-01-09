@@ -5,8 +5,7 @@ import os
 
 def read_file(file_name):
     file = open(file_name,'r')
-    print(file.readlines())
-    # return file.readlines()
+    return file.readlines()
 
 
 def get_user_input():
