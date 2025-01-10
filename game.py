@@ -4,15 +4,18 @@ import os
 
 
 def read_file(file_name):
+    """th is function Reads the content of a specified text file and returns its lines."""
     file = open(file_name,'r')
     return file.readlines()
 
 
 def get_user_input():
+    """this function Prompts the user to guess a missing letter and returns their input."""
     return input('Guess the missing letter: ')
 
 
 def ask_file_name():
+    """Asks the user to provide a file name containing words. If left empty, it defaults to "words.txt"."""
     file_name = input("Enter any word,  [leave empty to use default words] : ")
     if not file_name:
         # if the user did not enter anythig then we will use words in a text file
@@ -20,8 +23,7 @@ def ask_file_name():
     return file_name
 
 def fetch_words(category):
-    """here we call chatgbt and prompt to ask for a list of 20 words of the catagory asked by the user
-    then we overwrite the words text file with the new words"""
+    """ Fetches a list of words from an API based on the specified category and saves them in a file."""
     url = f"https://api.datamuse.com/words?ml={category}&max=20"
     response = requests.get(url)
     if response.status_code == 200:
@@ -36,6 +38,7 @@ def fetch_words(category):
         return "not found"
 
 def select_random_word(words):
+    """Selects a random word from the given list of words."""
     random_index = random.randint(0, len(words)-1)
     word = words[random_index].strip()
     return word
@@ -43,6 +46,7 @@ def select_random_word(words):
 
 # TODO: Step 1 - update to randomly fill in one character of the word only
 def random_fill_word(word):
+    """Creates a partially filled version of the word by revealing one random character."""
     random_index = random.randint(0, len(word)-1) 
     lst = []
 
@@ -59,6 +63,7 @@ def random_fill_word(word):
 
 # TODO: Step 1 - update to check if character is one of the missing characters
 def is_missing_char(original_word, answer_word, char):
+    """Checks if a guessed character is one of the missing characters in the word."""
     lst = [i for i in answer_word]
     lst2 = [i for i in original_word]
     lst3 = []
@@ -76,6 +81,7 @@ def is_missing_char(original_word, answer_word, char):
 
 # TODO: Step 1 - fill in missing char in word and return new more complete word
 def fill_in_char(original_word, answer_word, char):
+    """Fills in the correctly guessed character into the current answer word."""
     lst = [i for i in answer_word]
     lst2 = [i for i in original_word]
     lst3 = []
@@ -92,6 +98,7 @@ def fill_in_char(original_word, answer_word, char):
     return answer_word
 
 def do_correct_answer(original_word, answer, guess):
+    """Handles correct guesses by updating the current answer word."""
     answer = fill_in_char(original_word, answer, guess)
     print(answer)
     return answer
